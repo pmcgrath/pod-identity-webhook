@@ -6,7 +6,9 @@ metadata:
     app.kubernetes.io/name: pod-identity-webhook
   name: pod-identity-webhook
 spec:
-  replicas: {{ .Values.webhook.replicas }}
+  {{- if not .Values.webhook.hpa.enabled }}
+  replicas: {{ .Values.webhook.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: pod-identity-webhook

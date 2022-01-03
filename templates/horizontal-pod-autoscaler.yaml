@@ -1,0 +1,36 @@
+{{- if .Values.webhook.hpa.enabled }}
+{{- if .Capabilities.APIVersions.Has "autoscaling/v1" -}}        # Cater for pre v1.23
+apiVersion: autoscaling/v2
+{{- else -}}
+apiVersion: autoscaling/v2beta2
+{{- end }}
+kind: HorizontalPodAutoscaler
+metadata:
+  labels: 
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook
+spec:
+  maxReplicas: {{ .Values.webhook.hpa.maxReplicas }}
+  metrics:
+  {{- if .Values.webhook.hpa.targetCPUUtilizationPercentage }}
+  - resource:
+      name: cpu 
+      target:
+        averageUtilization: {{ .Values.webhook.hpa.targetCPUUtilizationPercentage }}
+        type: Utilization
+    type: Resource
+  {{- end }}
+  {{- if .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
+  - resource:
+      name: memory
+      target:
+        averageUtilization: {{ .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
+        type: Utilization
+    type: Resource
+  {{- end }}
+  minReplicas: {{ .Values.webhook.hpa.minReplicas }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pod-identity-webhook
+{{- end }}

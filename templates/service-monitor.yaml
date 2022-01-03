@@ -1,0 +1,20 @@
+{{- if .Values.webhook.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook
+spec:
+  endpoints:
+  - path: /metrics
+    targetPort: metrics
+  jobLabel: pod-identity-webhook
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pod-identity-webhook
+{{- end }}

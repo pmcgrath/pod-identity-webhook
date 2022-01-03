@@ -4,6 +4,12 @@ admissionReviewVersions:
 
 webhook:
   awsRegion: eu-west-1
+  hpa:
+    enabled: true
+    maxReplicas: 3
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
   image:                                                                # See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags
     repository: amazon/amazon-eks-pod-identity-webhook
     tag: a65cc3d
@@ -11,10 +17,10 @@ webhook:
   nodeSelector: {}
   pdb:
     enabled: true
-    maxUnavailable:
-    minAvailable: 1
+    maxUnavailable: 1
+    minAvailable:
   priorityClassName: system-node-critical
-  replicas: 1
+  replicaCount: 1
   resources:
     limits:
       cpu: 10m
@@ -22,6 +28,8 @@ webhook:
     requests:
       cpu: 10m
       memory: 25Mi
+  serviceMonitor:
+    enabled: true
   tolerations: []
 
 
@@ -32,7 +40,7 @@ webhookAdmission:
   imagePullPolicy: IfNotPresent
   nodeSelector: {}
   priorityClassName: system-node-critical
-  resources: 
+  resources:
     limits:
       cpu: 10m
       memory: 10Mi
