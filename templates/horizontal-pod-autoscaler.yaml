@@ -1,5 +1,5 @@
 {{- if .Values.webhook.hpa.enabled }}
-{{- if .Capabilities.APIVersions.Has "autoscaling/v1" -}}        # Cater for pre v1.23
+{{- if .Capabilities.APIVersions.Has "autoscaling/v2" -}}        # Cater for pre v1.23
 apiVersion: autoscaling/v2
 {{- else -}}
 apiVersion: autoscaling/v2beta2
