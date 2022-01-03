@@ -1,0 +1,42 @@
+admissionReviewVersions:
+- v1beta1                                                               # Need to use this as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
+
+
+webhook:
+  awsRegion: eu-west-1
+  image:                                                                # See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags
+    repository: amazon/amazon-eks-pod-identity-webhook
+    tag: a65cc3d
+  imagePullPolicy: IfNotPresent
+  nodeSelector: {}
+  pdb:
+    enabled: true
+    maxUnavailable:
+    minAvailable: 1
+  priorityClassName: system-node-critical
+  replicas: 1
+  resources:
+    limits:
+      cpu: 10m
+      memory: 25Mi
+    requests:
+      cpu: 10m
+      memory: 25Mi
+  tolerations: []
+
+
+webhookAdmission:
+  image:                                                                # See https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
+    repository: k8s.gcr.io/ingress-nginx/kube-webhook-certgen
+    tag: v1.1.1
+  imagePullPolicy: IfNotPresent
+  nodeSelector: {}
+  priorityClassName: system-node-critical
+  resources: 
+    limits:
+      cpu: 10m
+      memory: 10Mi
+    requests:
+      cpu: 10m
+      memory: 10Mi
+  tolerations: []

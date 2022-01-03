@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook
+spec:
+  replicas: {{ .Values.webhook.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pod-identity-webhook
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pod-identity-webhook
+    spec:
+      containers:
+      - command:
+        - /webhook
+        - --annotation-prefix=eks.amazonaws.com
+        - --aws-default-region={{ .Values.webhook.awsRegion }}
+        - --enable-debugging-handlers=false
+        - --in-cluster=false
+        - --logtostderr
+        - --metrics-port=9999
+        - --port=443
+        - --sts-regional-endpoint=true
+        - --tls-cert=/etc/pod-identity-webhook/tls/cert
+        - --tls-key=/etc/pod-identity-webhook/tls/key
+        - --token-audience=sts.amazonaws.com
+        - --token-expiration=86400
+        - -v=9
+        image: {{ .Values.webhook.image.repository }}:{{ .Values.webhook.image.tag }}
+        imagePullPolicy: {{ .Values.webhook.imagePullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9999
+        name: pod-identity-webhook
+        ports:
+        - containerPort: 443
+          name: https
+        - containerPort: 9999
+          name: metrics
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9999
+        resources: {{- toYaml .Values.webhook.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /etc/pod-identity-webhook/tls
+          name: tls
+          readOnly: true
+      priorityClassName: {{ .Values.webhook.priorityClassName }}
+      {{- if .Values.webhook.nodeSelector }}
+      nodeSelector: {{- toYaml .Values.webhook.nodeSelector | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsNonRoot: false                                             # Since it uses scratch and runs as root, see https://github.com/aws/amazon-eks-pod-identity-webhook/blob/master/Dockerfile
+      serviceAccountName: pod-identity-webhook
+      {{- if .Values.webhook.tolerations }}
+      tolerations: {{- toYaml .Values.webhook.tolerations | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: tls
+        secret:
+          secretName: pod-identity-webhook

@@ -1,0 +1,7 @@
+apiVersion: v2
+appVersion: 0.1.0
+description: Pod Identity Webhook
+home: https://github.com/aws/amazon-eks-pod-identity-webhook
+name: pod-identity-webhook
+type: application
+version: 0.1.0

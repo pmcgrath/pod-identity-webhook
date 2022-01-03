@@ -1,0 +1,14 @@
+{{- if .Values.webhook.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels: 
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook
+spec:
+  maxUnavailable: {{ .Values.webhook.pdb.maxUnavailable }}
+  minAvailable: {{ .Values.webhook.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pod-identity-webhook
+{{- end }} 

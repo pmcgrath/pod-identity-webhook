@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade,post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  labels:
+    app.kubernetes.io/component: webhook-admission
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook-admission
+rules:
+- apiGroups:
+  - admissionregistration.k8s.io
+  resourceNames:
+  - pod-identity-webhook
+  resources:
+  - mutatingwebhookconfigurations
+  verbs:
+  - get
+  - update

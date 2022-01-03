@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  labels:
+    app.kubernetes.io/component: webhook-admission
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook-admission-patch
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pod-identity-webhook
+      name: pod-identity-webhook-admission-patch
+    spec:
+      containers:
+      - args:
+        - patch
+        - --namespace=$(POD_NAMESPACE)
+        - --patch-failure-policy=Ignore
+        - --patch-mutating=true
+        - --patch-validating=false
+        - --secret-name=pod-identity-webhook
+        - --webhook-name=pod-identity-webhook
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: {{ .Values.webhookAdmission.image.repository }}:{{ .Values.webhookAdmission.image.tag }}
+        imagePullPolicy: {{ .Values.webhookAdmission.imagePullPolicy }}
+        name: patch
+        resources: {{- toYaml .Values.webhookAdmission.resources | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+      {{- if .Values.webhook.nodeSelector }}
+      nodeSelector: {{- toYaml .Values.webhookAdmission.nodeSelector | nindent 8 }}
+      {{- end }}
+      priorityClassName: {{ .Values.webhookAdmission.priorityClassName }}
+      restartPolicy: OnFailure
+      serviceAccountName: pod-identity-webhook-admission
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2000
+      {{- if .Values.webhook.tolerations }}
+      tolerations: {{- toYaml .Values.webhookAdmission.tolerations | nindent 8 }}
+      {{- end }}
+  ttlSecondsAfterFinished: 0
