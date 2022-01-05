@@ -1,0 +1,79 @@
+[
+  {
+    "actions": [
+      "alertOnly"
+    ],
+    "name": "exclude-list-secrets-check",
+    "policyType": "postureExceptionPolicy",
+    "posturePolicies": [
+      {
+        "controlID": "C-0015"
+      }
+    ],
+    "resources": [
+      {
+        "attributes": {
+          "kind": "ServiceAccount",
+          "name": "pod-identity-webhook-admission"
+        },
+        "designatorType": "Attributes"
+      }
+    ]
+  },
+  {
+    "actions": [
+      "alertOnly"
+    ],
+    "name": "exclude-ingress-egress-blocked-check",
+    "policyType": "postureExceptionPolicy",
+    "posturePolicies": [
+      {
+        "controlID": "C-0030"
+      }
+    ],
+    "resources": [
+      {
+        "attributes": {
+          "kind": "Deployment",
+          "name": "pod-identity-webhook"
+        },
+        "designatorType": "Attributes"
+      },
+      {
+        "attributes": {
+          "kind": "Job",
+          "name": "pod-identity-webhook-admission-create"
+        },
+        "designatorType": "Attributes"
+      },
+      {
+        "attributes": {
+          "kind": "Job",
+          "name": "pod-identity-webhook-admission-patch"
+        },
+        "designatorType": "Attributes"
+      }
+    ]
+  },
+  {
+    "actions": [
+      "alertOnly"
+    ],
+    "name": "exclude-mutating-webhook-configuration-check",
+    "policyType": "postureExceptionPolicy",
+    "posturePolicies": [
+      {
+        "controlID": "C-0039"
+      }
+    ],
+    "resources": [
+      {
+        "attributes": {
+          "kind": "MutatingWebhookConfiguration",
+          "name": "pod-identity-webhook"
+        },
+        "designatorType": "Attributes"
+      }
+    ]
+  }
+]

@@ -1,11 +1,7 @@
-admissionReviewVersions:
-- v1beta1                                                               # Need to use this as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
-
-
 webhook:
   awsRegion: eu-west-1
   hpa:
-    enabled: true
+    enabled: true                                                       # Assumes resource metrics are available
     maxReplicas: 3
     minReplicas: 1
     targetCPUUtilizationPercentage: 80
@@ -29,11 +25,12 @@ webhook:
       cpu: 10m
       memory: 25Mi
   serviceMonitor:
-    enabled: true
+    enabled: false                                                      # Need to have the prometheus operator ServiceNonitor CRD before this can be enabled
   tolerations: []
 
 
-webhookAdmission:
+webhookAdmission:                                                       # Config for mutating webhook - including its TLS config
+  failurePolicy: Ignore
   image:                                                                # See https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
     repository: k8s.gcr.io/ingress-nginx/kube-webhook-certgen
     tag: v1.1.1
@@ -47,4 +44,6 @@ webhookAdmission:
     requests:
       cpu: 10m
       memory: 10Mi
+  reviewVersions:
+  - v1beta1                                                             # Need to use this as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
   tolerations: []

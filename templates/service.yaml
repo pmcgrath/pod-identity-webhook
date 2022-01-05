@@ -9,7 +9,7 @@ spec:
   ports:
   - name: https
     port: 443
-    targetPort: 443
+    targetPort: 1443
   - name: metrics
     port: 9999
     targetPort: 9999
