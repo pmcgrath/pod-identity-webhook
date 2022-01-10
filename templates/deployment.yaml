@@ -63,11 +63,14 @@ spec:
           readOnly: true
       priorityClassName: {{ .Values.webhook.priorityClassName }}
       {{- if .Values.webhook.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.webhook.nodeSelector | nindent 8 }}
+      nodeSelector: {{- toYaml .Values.webhook.nodeSelector | nindent 6 }}
       {{- end }}
       serviceAccountName: pod-identity-webhook
       {{- if .Values.webhook.tolerations }}
-      tolerations: {{- toYaml .Values.webhook.tolerations | nindent 8 }}
+      tolerations: {{- toYaml .Values.webhook.tolerations | nindent 6 }}
+      {{- end }}
+      {{- if .Values.webhook.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- toYaml .Values.webhook.topologySpreadConstraints | nindent 6 }}
       {{- end }}
       volumes:
       - name: tls

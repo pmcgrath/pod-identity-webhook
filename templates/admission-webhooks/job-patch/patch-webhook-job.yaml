@@ -42,12 +42,12 @@ spec:
           runAsNonRoot: true
           runAsUser: 2000
       {{- if .Values.webhook.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.webhookAdmission.nodeSelector | nindent 8 }}
+      nodeSelector: {{- toYaml .Values.webhookAdmission.nodeSelector | nindent 6 }}
       {{- end }}
       priorityClassName: {{ .Values.webhookAdmission.priorityClassName }}
       restartPolicy: OnFailure
       serviceAccountName: pod-identity-webhook-admission
       {{- if .Values.webhook.tolerations }}
-      tolerations: {{- toYaml .Values.webhookAdmission.tolerations | nindent 8 }}
+      tolerations: {{- toYaml .Values.webhookAdmission.tolerations | nindent 6 }}
       {{- end }}
   ttlSecondsAfterFinished: 0

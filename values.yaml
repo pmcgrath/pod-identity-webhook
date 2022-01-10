@@ -27,6 +27,7 @@ webhook:
   serviceMonitor:
     enabled: false                                                      # Need to have the prometheus operator ServiceNonitor CRD before this can be enabled
   tolerations: []
+  topologySpreadConstraints: []                                         # See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 
 
 webhookAdmission:                                                       # Config for mutating webhook - including its TLS config

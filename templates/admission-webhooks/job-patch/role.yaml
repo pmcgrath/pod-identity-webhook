@@ -1,3 +1,8 @@
+# Image's logic gets all secrets in the namespace, since we need to create a secret we cannot restirct with a resourceName
+# Tried with a resource name, but kubectl auth can-i create secrets/pod-identity-webhook --as=system:serviceaccount:default:pod-identity-webhook-admission
+# indicates this would not work, guess it is a POST to /secrets rather than a PUT /secrets/xyz
+#
+# Can also use this to see privs:  kubectl auth can-i --list --as=system:serviceaccount:default:pod-identity-webhook-admission
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -16,7 +21,3 @@ rules:
   verbs:
   - create
   - get
-
-# PENDING
-#  resourceNames:
-#  - pod-idendity-webhook
