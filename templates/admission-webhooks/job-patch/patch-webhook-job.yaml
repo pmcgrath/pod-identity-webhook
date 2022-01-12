@@ -50,4 +50,4 @@ spec:
       {{- if .Values.webhook.tolerations }}
       tolerations: {{- toYaml .Values.webhookAdmission.tolerations | nindent 6 }}
       {{- end }}
-   ttlSecondsAfterFinished: {{ .Values.webhookAdmission.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.webhookAdmission.ttlSecondsAfterFinished }}
