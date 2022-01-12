@@ -4,13 +4,14 @@
 #               ComparisonError unsupported HPA GVK: autoscaling/v2, Kind=HorizontalPodAutoscaler
 #       So lets stick with v2beta2 for now, have left some logic as a breadcrump, but used a non existent k8s version so will be false for now
 #       Speculating this is because the ArgoCD client-go version needs to catch up
+#       Note: the removal of the '-' in the if block, without this the apiVersion will not appear - thats another 2 hours of my life lost
 #
 # 2) Needed to keep order of the metrics as - memory and cpu - k8s HPA controller re-orders so lots of systems including ArgoCD have issues with this
 #       See https://github.com/cortexproject/cortex-helm-chart/issues/284
 #       So lets keep that order as others have done in their charts
 
 {{- if .Values.webhook.hpa.enabled }}
-{{- if and (semverCompare ">=1.25" .Capabilities.KubeVersion.Version) (.Capabilities.APIVersions.Has "autoscaling/v2") -}}      # See issue 1 above
+{{ if and (semverCompare ">=1.25" .Capabilities.KubeVersion.Version) (.Capabilities.APIVersions.Has "autoscaling/v2") -}}      # See issue 1 above
 apiVersion: autoscaling/v2
 {{- else -}}
 apiVersion: autoscaling/v2beta2
@@ -45,22 +46,3 @@ spec:
     kind: Deployment
     name: pod-identity-webhook
 {{- end }}
-
-
-
-
-# PENDING: Remove me
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    app.kubernetes.io/name: pod-identity-webhook
-  name: pod-identity-webhook-capabilities
-data:
-  caps: |
-    {{- toYaml .Capabilities | nindent 4 -}}
- ata:
-  capsAuto: |
-    autocaling/v2: {{ .Capabilities.APIVersions.Has "autoscaling/v2" }}
