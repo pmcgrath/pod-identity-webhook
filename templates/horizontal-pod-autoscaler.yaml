@@ -11,20 +11,20 @@ metadata:
   name: pod-identity-webhook
 spec:
   maxReplicas: {{ .Values.webhook.hpa.maxReplicas }}
-  metrics:
-  {{- if .Values.webhook.hpa.targetCPUUtilizationPercentage }}
-  - resource:
-      name: cpu
-      target:
-        averageUtilization: {{ .Values.webhook.hpa.targetCPUUtilizationPercentage }}
-        type: Utilization
-    type: Resource
-  {{- end }}
+  metrics:                                                      # See https://github.com/cortexproject/cortex-helm-chart/issues/284
   {{- if .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
   - resource:
       name: memory
       target:
         averageUtilization: {{ .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
+        type: Utilization
+    type: Resource
+  {{- end }}
+  {{- if .Values.webhook.hpa.targetCPUUtilizationPercentage }}
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: {{ .Values.webhook.hpa.targetCPUUtilizationPercentage }}
         type: Utilization
     type: Resource
   {{- end }}
