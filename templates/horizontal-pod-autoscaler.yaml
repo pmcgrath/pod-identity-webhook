@@ -6,7 +6,7 @@ apiVersion: autoscaling/v2beta2
 {{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
-  labels: 
+  labels:
     app.kubernetes.io/name: pod-identity-webhook
   name: pod-identity-webhook
 spec:
@@ -14,7 +14,7 @@ spec:
   metrics:
   {{- if .Values.webhook.hpa.targetCPUUtilizationPercentage }}
   - resource:
-      name: cpu 
+      name: cpu
       target:
         averageUtilization: {{ .Values.webhook.hpa.targetCPUUtilizationPercentage }}
         type: Utilization
@@ -34,3 +34,22 @@ spec:
     kind: Deployment
     name: pod-identity-webhook
 {{- end }}
+
+
+
+
+# PENDING: Remove me
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook-capabilities
+data:
+  caps: |
+    {{- toYaml .Capabilities | nindent 4 -}}
+ ata:
+  capsAuto: |
+    autocaling/v2: {{ .Capabilities.APIVersions.Has "autoscaling/v2" }}
