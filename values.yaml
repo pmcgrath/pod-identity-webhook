@@ -48,3 +48,4 @@ webhookAdmission:                                                       # Config
   reviewVersions:
   - v1beta1                                                             # Need to use this as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
   tolerations: []
+  ttlSecondsAfterFinished: 600
