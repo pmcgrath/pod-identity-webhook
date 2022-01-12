@@ -1,5 +1,5 @@
 {{- if .Values.webhook.hpa.enabled }}
-{{- if .Capabilities.APIVersions.Has "autoscaling/v2" -}}        # Cater for pre v1.23
+{{- if and (semverCompare ">=1.23" .Capabilities.KubeVersion.Version) (.Capabilities.APIVersions.Has "autoscaling/v2") -}}        # Cater for pre v1.23
 apiVersion: autoscaling/v2
 {{- else -}}
 apiVersion: autoscaling/v2beta2
@@ -12,19 +12,19 @@ metadata:
 spec:
   maxReplicas: {{ .Values.webhook.hpa.maxReplicas }}
   metrics:                                                      # See https://github.com/cortexproject/cortex-helm-chart/issues/284
-  {{- if .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
-  - resource:
-      name: memory
-      target:
-        averageUtilization: {{ .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
-        type: Utilization
-    type: Resource
-  {{- end }}
   {{- if .Values.webhook.hpa.targetCPUUtilizationPercentage }}
   - resource:
       name: cpu
       target:
         averageUtilization: {{ .Values.webhook.hpa.targetCPUUtilizationPercentage }}
+        type: Utilization
+    type: Resource
+  {{- end }}
+  {{- if .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
+  - resource:
+      name: memory
+      target:
+        averageUtilization: {{ .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
         type: Utilization
     type: Resource
   {{- end }}
