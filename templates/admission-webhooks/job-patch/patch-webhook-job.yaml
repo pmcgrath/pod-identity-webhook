@@ -1,4 +1,6 @@
-# Note: Did not include ttlSecondsAfterFinished option as setting to 0 caused ArgoCD issue where it would appear to be pending
+# Notes:
+#       Did not include ttlSecondsAfterFinished opton as setting to 0 caused ArgoCD issue where it would appear to be pending
+#       Have made the resources optional as have observed these slows down the pod creation/start
 
 apiVersion: batch/v1
 kind: Job
@@ -34,7 +36,7 @@ spec:
         image: {{ .Values.webhookAdmission.image.repository }}:{{ .Values.webhookAdmission.image.tag }}
         imagePullPolicy: {{ .Values.webhookAdmission.imagePullPolicy }}
         name: patch
-        {{- if toYaml .Values.webhookAdmission.resources }}
+        {{- if .Values.webhookAdmission.resources }}
         resources: {{- toYaml .Values.webhookAdmission.resources | nindent 10 }}
         {{- end }}
         securityContext:

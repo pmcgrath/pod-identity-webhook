@@ -1,12 +1,16 @@
+# Comments are formatted for https://github.com/norwoodj/helm-docs so we can include in the README.md
+
 webhook:
   awsRegion: eu-west-1
   hpa:
-    enabled: true                                                       # Assumes resource metrics are available
+    # -- Assumes resource metrics are available
+    enabled: true
     maxReplicas: 3
     minReplicas: 1
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
-  image:                                                                # See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags
+  image:
+    # -- See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags
     repository: amazon/amazon-eks-pod-identity-webhook
     tag: a65cc3d
   imagePullPolicy: IfNotPresent
@@ -16,6 +20,8 @@ webhook:
     maxUnavailable: 1
     minAvailable:
   priorityClassName: system-node-critical
+  # -- Will use this for the liveness and readiness probes, allowing time for the secret creation job to populate the k8s TLS secret and the patch job to update the webhook's caBundle
+  probesInitialDelaySeconds: 5
   replicaCount: 1
   resources:
     limits:
@@ -25,19 +31,25 @@ webhook:
       cpu: 10m
       memory: 25Mi
   serviceMonitor:
-    enabled: false                                                      # Need to have the prometheus operator ServiceNonitor CRD before this can be enabled
+    # -- Need to have the prometheus operator ServiceNonitor CRD before this can be enabled
+    enabled: false
   tolerations: []
-  topologySpreadConstraints: []                                         # See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  # -- See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  topologySpreadConstraints: []
 
 
-webhookAdmission:                                                       # Config for mutating webhook - including its TLS config
+# Config for mutating webhook - including its TLS config
+webhookAdmission:
+  # -- Danger if you set to Fail may block pod creations unless the target service is healthy
   failurePolicy: Ignore
-  image:                                                                # See https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
+  # -- See https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
+  image:
     repository: k8s.gcr.io/ingress-nginx/kube-webhook-certgen
     tag: v1.1.1
   imagePullPolicy: IfNotPresent
   nodeSelector: {}
   priorityClassName: system-node-critical
+  # -- Have found setting this delays the pod creation and startup time, ingress-nginx does not set these, so lets follow their example
   resources: {}
 #    limits:
 #      cpu: 10m
@@ -45,6 +57,7 @@ webhookAdmission:                                                       # Config
 #    requests:
 #      cpu: 10m
 #      memory: 10Mi
+  # -- Need to use v1beta1 as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
   reviewVersions:
-  - v1beta1                                                             # Need to use this as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
+  - v1beta1
   tolerations: []
