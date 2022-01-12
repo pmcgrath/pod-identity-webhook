@@ -1,3 +1,5 @@
+# Note: Did not include ttlSecondsAfterFinished option as setting to 0 caused ArgoCD issue where it would appear to be pending
+
 apiVersion: batch/v1
 kind: Job
 metadata:
