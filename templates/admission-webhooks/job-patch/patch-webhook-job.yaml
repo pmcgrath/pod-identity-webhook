@@ -8,7 +8,7 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
   labels:
     app.kubernetes.io/component: webhook-admission
-    app.kubernetes.io/name: pod-identity-webhook
+    app.kubernetes.io/name: pod-identity-webhook-admission-patch
   name: pod-identity-webhook-admission-patch
 spec:
   template:
@@ -34,7 +34,9 @@ spec:
         image: {{ .Values.webhookAdmission.image.repository }}:{{ .Values.webhookAdmission.image.tag }}
         imagePullPolicy: {{ .Values.webhookAdmission.imagePullPolicy }}
         name: patch
+        {{- if toYaml .Values.webhookAdmission.resources }}
         resources: {{- toYaml .Values.webhookAdmission.resources | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

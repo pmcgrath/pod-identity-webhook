@@ -38,13 +38,13 @@ webhookAdmission:                                                       # Config
   imagePullPolicy: IfNotPresent
   nodeSelector: {}
   priorityClassName: system-node-critical
-  resources:
-    limits:
-      cpu: 10m
-      memory: 10Mi
-    requests:
-      cpu: 10m
-      memory: 10Mi
+  resources: {}
+#    limits:
+#      cpu: 10m
+#      memory: 10Mi
+#    requests:
+#      cpu: 10m
+#      memory: 10Mi
   reviewVersions:
   - v1beta1                                                             # Need to use this as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
   tolerations: []

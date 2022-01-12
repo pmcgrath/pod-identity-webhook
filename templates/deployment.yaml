@@ -49,7 +49,9 @@ spec:
           httpGet:
             path: /healthz
             port: 9999
+        {{- if .Values.webhook.resources }}
         resources: {{- toYaml .Values.webhook.resources | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
