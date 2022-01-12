@@ -1,5 +1,14 @@
+# Issues
+# 1) Could not use '.Capabilities.APIVersions.Has "autoscaling/v2"' to conditionally use 'apiVersion: autoscaling/v2'
+#       Will work fine and create a v2 resource but getting an issue with ArgoCD comparison if we create this api versioned resource
+#       So lets stick with
+#
+# 2) Needed to keep order of the metrics as - memory and cpu - k8s HPA controller re-orders so lots of systems including ArgoCD have issues with this
+# See https://github.com/cortexproject/cortex-helm-chart/issues/284
+# So lets keep that order as others have done in their charts
+
 {{- if .Values.webhook.hpa.enabled }}
-{{- if and (semverCompare ">=1.24" .Capabilities.KubeVersion.Version) (.Capabilities.APIVersions.Has "autoscaling/v2") -}}        # Cater for pre v1.23
+{{- if and (semverCompare ">=1.23" .Capabilities.KubeVersion.Version) (.Capabilities.APIVersions.Has "autoscaling/v2") -}}      # See issue 1 above
 apiVersion: autoscaling/v2
 {{- else -}}
 apiVersion: autoscaling/v2beta2
@@ -11,7 +20,7 @@ metadata:
   name: pod-identity-webhook
 spec:
   maxReplicas: {{ .Values.webhook.hpa.maxReplicas }}
-  metrics:                                                      # See https://github.com/cortexproject/cortex-helm-chart/issues/284
+  metrics:                                                      # See issue 2 above
   {{- if .Values.webhook.hpa.targetMemoryUtilizationPercentage }}
   - resource:
       name: memory
