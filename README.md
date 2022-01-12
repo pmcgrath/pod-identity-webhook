@@ -34,20 +34,20 @@ Uses the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/main/c
 |-----|------|---------|-------------|
 | webhook.awsRegion | string | `"eu-west-1"` |  |
 | webhook.hpa.enabled | bool | `false` | Assumes resource metrics are available |
-| webhook.hpa.maxReplicas | int | `3` |  |
-| webhook.hpa.minReplicas | int | `1` |  |
+| webhook.hpa.maxReplicas | int | `4` |  |
+| webhook.hpa.minReplicas | int | `2` |  |
 | webhook.hpa.targetCPUUtilizationPercentage | int | `80` |  |
 | webhook.hpa.targetMemoryUtilizationPercentage | int | `80` |  |
 | webhook.image.repository | string | `"amazon/amazon-eks-pod-identity-webhook"` | See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags |
 | webhook.image.tag | string | `"a65cc3d"` |  |
 | webhook.imagePullPolicy | string | `"IfNotPresent"` |  |
 | webhook.nodeSelector | object | `{}` |  |
-| webhook.pdb.enabled | bool | `true` |  |
+| webhook.pdb.enabled | bool | `false` |  |
 | webhook.pdb.maxUnavailable | int | `1` |  |
 | webhook.pdb.minAvailable | string | `nil` |  |
 | webhook.priorityClassName | string | `"system-node-critical"` |  |
 | webhook.probesInitialDelaySeconds | int | `5` | Will use this for the liveness and readiness probes, allowing time for the secret creation job to populate the k8s TLS secret and the patch job to update the webhook's caBundle |
-| webhook.replicaCount | int | `1` |  |
+| webhook.replicaCount | int | `2` |  |
 | webhook.resources.limits.cpu | string | `"10m"` |  |
 | webhook.resources.limits.memory | string | `"25Mi"` |  |
 | webhook.resources.requests.cpu | string | `"10m"` |  |
