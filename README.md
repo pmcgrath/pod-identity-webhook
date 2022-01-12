@@ -33,7 +33,7 @@ Uses the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/main/c
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | webhook.awsRegion | string | `"eu-west-1"` |  |
-| webhook.hpa.enabled | bool | `true` | Assumes resource metrics are available |
+| webhook.hpa.enabled | bool | `false` | Assumes resource metrics are available |
 | webhook.hpa.maxReplicas | int | `3` |  |
 | webhook.hpa.minReplicas | int | `1` |  |
 | webhook.hpa.targetCPUUtilizationPercentage | int | `80` |  |

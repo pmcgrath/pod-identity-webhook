@@ -4,9 +4,9 @@ webhook:
   awsRegion: eu-west-1
   hpa:
     # -- Assumes resource metrics are available
-    enabled: true
-    maxReplicas: 3
-    minReplicas: 1
+    enabled: false
+    maxReplicas: 4
+    minReplicas: 2
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
   image:
@@ -16,13 +16,13 @@ webhook:
   imagePullPolicy: IfNotPresent
   nodeSelector: {}
   pdb:
-    enabled: true
+    enabled: false
     maxUnavailable: 1
     minAvailable:
   priorityClassName: system-node-critical
   # -- Will use this for the liveness and readiness probes, allowing time for the secret creation job to populate the k8s TLS secret and the patch job to update the webhook's caBundle
   probesInitialDelaySeconds: 5
-  replicaCount: 1
+  replicaCount: 2
   resources:
     limits:
       cpu: 10m
