@@ -7,6 +7,8 @@ Uses the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/main/c
 - Webhook deployment will fail until the TLS cert is created
 - Can use variations of to test RBAC `kubectl auth can-i get secrets/pod-identity-webhook --namespace kube-system --as system:serviceaccount:kube-system:pod-identity-webhook-admission`
 
+Could also use (cert-manager CA injector)[https://cert-manager.io/docs/concepts/ca-injector/] which would be easier, would not need any of the jobs for TLS creation and webhook caBundle patching
+
 # Webhook deployment
 - Have **not** went with using k8s CSR approach to creating the TLS certificate as
   - The implementation is using a deprecated version, would need a signerName
@@ -48,10 +50,10 @@ Uses the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/main/c
 | webhook.priorityClassName | string | `"system-node-critical"` |  |
 | webhook.probesInitialDelaySeconds | int | `5` | Will use this for the liveness and readiness probes, allowing time for the secret creation job to populate the k8s TLS secret and the patch job to update the webhook's caBundle |
 | webhook.replicaCount | int | `2` |  |
-| webhook.resources.limits.cpu | string | `"10m"` |  |
-| webhook.resources.limits.memory | string | `"25Mi"` |  |
-| webhook.resources.requests.cpu | string | `"10m"` |  |
-| webhook.resources.requests.memory | string | `"25Mi"` |  |
+| webhook.resources.limits.cpu | string | `"20m"` |  |
+| webhook.resources.limits.memory | string | `"50Mi"` |  |
+| webhook.resources.requests.cpu | string | `"20m"` |  |
+| webhook.resources.requests.memory | string | `"50Mi"` |  |
 | webhook.serviceMonitor.enabled | bool | `false` | Need to have the prometheus operator ServiceNonitor CRD before this can be enabled |
 | webhook.tolerations | list | `[]` |  |
 | webhook.topologySpreadConstraints | list | `[]` | See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |
@@ -60,8 +62,8 @@ Uses the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/main/c
 | webhookAdmission.imagePullPolicy | string | `"IfNotPresent"` |  |
 | webhookAdmission.nodeSelector | object | `{}` |  |
 | webhookAdmission.priorityClassName | string | `"system-node-critical"` |  |
-| webhookAdmission.resources | object | `{}` | Have found setting this delays the pod creation and startup time, ingress-nginx does not set these, so lets follow their example |
-| webhookAdmission.reviewVersions[0] | string | `"v1beta1"` |  |
+| webhookAdmission.resources | object | `{"limits":{"cpu":"15m","memory":"20Mi"},"requests":{"cpu":"15m","memory":"20Mi"}}` | Have found setting this to very low values delays the pod creation and startup time, ingress-nginx does not set these, these are reasonable defaults |
+| webhookAdmission.reviewVersions | list | `["v1beta1"]` | Need to use v1beta1 as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132 |
 | webhookAdmission.tolerations | list | `[]` |  |
 
 ----------------------------------------------

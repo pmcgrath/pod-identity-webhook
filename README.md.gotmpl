@@ -7,6 +7,8 @@ Uses the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/main/c
 - Webhook deployment will fail until the TLS cert is created
 - Can use variations of to test RBAC `kubectl auth can-i get secrets/pod-identity-webhook --namespace kube-system --as system:serviceaccount:kube-system:pod-identity-webhook-admission`
 
+Could also use (cert-manager CA injector)[https://cert-manager.io/docs/concepts/ca-injector/] which would be easier, would not need any of the jobs for TLS creation and webhook caBundle patching
+
 
 
 # Webhook deployment

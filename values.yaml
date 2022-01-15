@@ -25,11 +25,11 @@ webhook:
   replicaCount: 2
   resources:
     limits:
-      cpu: 10m
-      memory: 25Mi
+      cpu: 20m
+      memory: 50Mi
     requests:
-      cpu: 10m
-      memory: 25Mi
+      cpu: 20m
+      memory: 50Mi
   serviceMonitor:
     # -- Need to have the prometheus operator ServiceNonitor CRD before this can be enabled
     enabled: false
@@ -49,14 +49,14 @@ webhookAdmission:
   imagePullPolicy: IfNotPresent
   nodeSelector: {}
   priorityClassName: system-node-critical
-  # -- Have found setting this delays the pod creation and startup time, ingress-nginx does not set these, so lets follow their example
-  resources: {}
-#    limits:
-#      cpu: 10m
-#      memory: 10Mi
-#    requests:
-#      cpu: 10m
-#      memory: 10Mi
+  # -- Have found setting this to very low values delays the pod creation and startup time, ingress-nginx does not set these, these are reasonable defaults
+  resources:
+    limits:
+      cpu: 15m
+      memory: 20Mi
+    requests:
+      cpu: 15m
+      memory: 20Mi
   # -- Need to use v1beta1 as the AWS image implementation returns v1beta1 responses, see https://github.com/aws/amazon-eks-pod-identity-webhook/issues/132
   reviewVersions:
   - v1beta1
