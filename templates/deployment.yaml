@@ -39,6 +39,7 @@ spec:
           httpGet:
             path: /healthz
             port: 9999
+          initialDelaySeconds: {{ .Values.webhook.probesInitialDelaySeconds }}  # Lets allow time for the secret creation and mutating webhook patching
         name: pod-identity-webhook
         ports:
         - containerPort: 1443
@@ -49,14 +50,17 @@ spec:
           httpGet:
             path: /healthz
             port: 9999
+          initialDelaySeconds: {{ .Values.webhook.probesInitialDelaySeconds }}  # Lets allow time for the secret creation and mutating webhook patching
+        {{- if .Values.webhook.resources }}
         resources: {{- toYaml .Values.webhook.resources | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
             drop:
             - ALL
           readOnlyRootFilesystem: true
-          runAsNonRoot: false                                             # Since it uses scratch and runs as root, see https://github.com/aws/amazon-eks-pod-identity-webhook/blob/master/Dockerfile
+          runAsNonRoot: false                                                   # Since it uses scratch and runs as root, see https://github.com/aws/amazon-eks-pod-identity-webhook/blob/master/Dockerfile
         volumeMounts:
         - mountPath: /etc/pod-identity-webhook/tls
           name: tls
