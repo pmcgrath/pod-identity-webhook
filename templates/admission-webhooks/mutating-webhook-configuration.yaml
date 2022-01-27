@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: pod-identity-webhook
   name: pod-identity-webhook
 webhooks:
-- admissionReviewVersions: {{ toYaml .Values.webhookAdmission.reviewVersions | nindent 2}}
+- admissionReviewVersions: {{ toYaml .Values.webhookAdmission.reviewVersions | nindent 2 }}
   clientConfig:
     service:
       name: pod-identity-webhook

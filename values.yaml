@@ -12,7 +12,7 @@ webhook:
   image:
     # -- See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags
     repository: amazon/amazon-eks-pod-identity-webhook
-    tag: a65cc3d
+    tag: v0.3.0
   imagePullPolicy: IfNotPresent
   nodeSelector: {}
   pdb:
