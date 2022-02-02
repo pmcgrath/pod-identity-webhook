@@ -23,7 +23,7 @@ spec:
       - args:
         - patch
         - --namespace=$(POD_NAMESPACE)
-        - --patch-failure-policy=Fail
+        - --patch-failure-policy={{ .Values.webhookAdmission.failurePolicy }}
         - --patch-mutating=true
         - --patch-validating=false
         - --secret-name=pod-identity-webhook

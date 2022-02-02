@@ -41,7 +41,7 @@ webhook:
 # Config for mutating webhook - including its TLS config
 webhookAdmission:
   # -- Danger if you set to Fail may block pod creations unless the target service is healthy
-  failurePolicy: Ignore
+  failurePolicy: Fail
   # -- See https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
   image:
     repository: k8s.gcr.io/ingress-nginx/kube-webhook-certgen

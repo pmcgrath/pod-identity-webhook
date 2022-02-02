@@ -56,7 +56,7 @@ Could also use (cert-manager CA injector)[https://cert-manager.io/docs/concepts/
 | webhook.serviceMonitor.enabled | bool | `false` | Need to have the prometheus operator ServiceNonitor CRD before this can be enabled |
 | webhook.tolerations | list | `[]` |  |
 | webhook.topologySpreadConstraints | list | `[]` | See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |
-| webhookAdmission.failurePolicy | string | `"Ignore"` | Danger if you set to Fail may block pod creations unless the target service is healthy |
+| webhookAdmission.failurePolicy | string | `"Fail"` | Danger if you set to Fail may block pod creations unless the target service is healthy |
 | webhookAdmission.image | object | `{"repository":"k8s.gcr.io/ingress-nginx/kube-webhook-certgen","tag":"v1.1.1"}` | See https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml |
 | webhookAdmission.imagePullPolicy | string | `"IfNotPresent"` |  |
 | webhookAdmission.nodeSelector | object | `{}` |  |
