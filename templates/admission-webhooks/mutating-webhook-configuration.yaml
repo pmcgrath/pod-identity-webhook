@@ -13,7 +13,7 @@ webhooks:
       namespace: {{ .Release.Namespace }}
       path: /mutate
       port: 443
-  failurePolicy: {{ .Values.webhookAdmission.failurePolicy }}
+  failurePolicy: Ignore     # Will patch this with the value from the values file, but need to ignore to allow the patch job pod to start
   matchPolicy: Equivalent
   name: pod-identity-webhook.amazonaws.com
   namespaceSelector: {}
