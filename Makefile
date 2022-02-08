@@ -1,10 +1,6 @@
 KUBESCAPE_FAILURE_THRESHOLD=1
 
 
-helm-docs-exec:
-	@# See https://github.com/norwoodj/helm-docs
-	@helm-docs -t README.md.gotmpl
-
 kubescape-check:
 	@# See https://github.com/armosec/kubescape
 	@helm template --api-versions autoscaling/v2 --api-versions policy/v1/PodDisruptionBudget . | \
