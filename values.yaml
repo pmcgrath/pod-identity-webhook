@@ -2,6 +2,11 @@
 
 webhook:
   awsRegion: eu-west-1
+  grafanaDashboards:
+    # -- Assumes Grafana dashboard loading from a configmap is enabled and the label value matches the importLabelValue
+    enabled: false
+    # -- Will set the configmap grafana_dashboard label to this value
+    importLabelValue: "1"
   hpa:
     # -- Assumes resource metrics are available
     enabled: false

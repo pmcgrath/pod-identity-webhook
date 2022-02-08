@@ -1,0 +1,12 @@
+{{- if and .Values.webhook.grafanaDashboards.enabled (.Files.Glob "files/grafana-dashboards/*.json") }}
+apiVersion: v1
+data:
+  {{- (.Files.Glob "files/grafana-dashboards/**.json").AsConfig | nindent 2 }}
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: grafana-dashboards
+    app.kubernetes.io/name: pod-identity-webhook-grafana-dashboards
+    grafana_dashboard: {{ .Values.webhook.grafanaDashboards.importLabelValue | quote }}
+  name: pod-identity-webhook-grafana-dashboards
+{{ end }}
