@@ -45,6 +45,9 @@ Could also use (cert-manager CA injector)[https://cert-manager.io/docs/concepts/
 | webhook.image.repository | string | `"amazon/amazon-eks-pod-identity-webhook"` | See https://hub.docker.com/r/amazon/amazon-eks-pod-identity-webhook/tags |
 | webhook.image.tag | string | `"v0.3.0"` |  |
 | webhook.imagePullPolicy | string | `"IfNotPresent"` |  |
+| webhook.networkPolicy.enabled | bool | `false` | Enable NetworkPolicy - will create one that allows the kube-system api-server to hit the webhook and prometheus to scrape metrics |
+| webhook.networkPolicy.metricsScrapingSource.namespace | string | `"monitoring"` |  |
+| webhook.networkPolicy.metricsScrapingSource.podLabels."app.kubernetes.io/name" | string | `"prometheus"` |  |
 | webhook.nodeSelector | object | `{}` |  |
 | webhook.pdb.enabled | bool | `false` |  |
 | webhook.pdb.maxUnavailable | int | `1` |  |
@@ -56,7 +59,7 @@ Could also use (cert-manager CA injector)[https://cert-manager.io/docs/concepts/
 | webhook.resources.limits.memory | string | `"50Mi"` |  |
 | webhook.resources.requests.cpu | string | `"20m"` |  |
 | webhook.resources.requests.memory | string | `"50Mi"` |  |
-| webhook.serviceMonitor.enabled | bool | `false` | Need to have the prometheus operator ServiceNonitor CRD before this can be enabled |
+| webhook.serviceMonitor.enabled | bool | `false` | For this to be effective the Prometheus operator's ServiceNonitor CRD must exist, will use Helm's .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" check |
 | webhook.tolerations | list | `[]` |  |
 | webhook.topologySpreadConstraints | list | `[]` | See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ |
 | webhookAdmission.failurePolicy | string | `"Fail"` | Danger if you set to Fail may block pod creations unless the target service is healthy |

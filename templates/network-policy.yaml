@@ -1,0 +1,35 @@
+{{- if .Values.webhook.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: webhook-netpol
+    app.kubernetes.io/name: pod-identity-webhook
+  name: pod-identity-webhook
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: api-server
+    ports:
+    - port: https
+      protocol: TCP
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.webhook.networkPolicy.metricsScrapingSource.namespace }}
+      podSelector:
+        matchLabels: {{ toYaml .Values.webhook.networkPolicy.metricsScrapingSource.podLabels | nindent 10 }}
+    ports:
+    - port: metrics
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: pod-identity-webhook
+  policyTypes:
+  - Ingress
+{{- end }}

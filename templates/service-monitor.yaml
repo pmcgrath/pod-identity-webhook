@@ -1,4 +1,4 @@
-{{- if .Values.webhook.serviceMonitor.enabled }}
+{{- if and .Values.webhook.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:

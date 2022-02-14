@@ -19,6 +19,13 @@ webhook:
     repository: amazon/amazon-eks-pod-identity-webhook
     tag: v0.3.0
   imagePullPolicy: IfNotPresent
+  networkPolicy:
+    # -- Enable NetworkPolicy - will create one that allows the kube-system api-server to hit the webhook and prometheus to scrape metrics
+    enabled: false
+    metricsScrapingSource:
+      podLabels:
+        app.kubernetes.io/name: prometheus
+      namespace: monitoring
   nodeSelector: {}
   pdb:
     enabled: false
@@ -36,7 +43,7 @@ webhook:
       cpu: 20m
       memory: 50Mi
   serviceMonitor:
-    # -- Need to have the prometheus operator ServiceNonitor CRD before this can be enabled
+    # -- For this to be effective the Prometheus operator's ServiceNonitor CRD must exist, will use Helm's .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" check
     enabled: false
   tolerations: []
   # -- See https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
