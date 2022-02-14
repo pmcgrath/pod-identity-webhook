@@ -67,7 +67,7 @@ spec:
           readOnly: true
       priorityClassName: {{ .Values.webhook.priorityClassName }}
       {{- if .Values.webhook.nodeSelector }}
-      nodeSelector: {{- toYaml .Values.webhook.nodeSelector | nindent 6 }}
+      nodeSelector: {{- toYaml .Values.webhook.nodeSelector | nindent 8 }}
       {{- end }}
       serviceAccountName: pod-identity-webhook
       {{- if .Values.webhook.tolerations }}

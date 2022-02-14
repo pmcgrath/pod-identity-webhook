@@ -1,4 +1,5 @@
 # See https://pre-commit.com/
+# Can run one at a time, i.e. pre-commit run end-of-file-fixer --all
 repos:
 - hooks:
   - id: end-of-file-fixer
